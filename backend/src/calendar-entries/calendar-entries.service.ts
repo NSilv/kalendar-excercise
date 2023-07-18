@@ -1,36 +1,39 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCalendarEntryDto } from './dto/create-calendar-entry.dto';
-import { UpdateCalendarEntryDto } from './dto/update-calendar-entry.dto';
+import * as model from '@models/calendar-entry';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class CalendarEntriesService {
   constructor(private prisma: PrismaService) {}
-  create(createCalendarEntryDto: CreateCalendarEntryDto) {
-    return 'This action adds a new calendarEntry';
+
+  async create(data: model.CreateRequest) {
+    return await this.prisma.calendarEntry.create({
+      data,
+    });
   }
 
-  async findAll() {
+  async findAll(): Promise<model.FindAllResponse> {
     return await this.prisma.calendarEntry.findMany();
     // return `This action returns all calendarEntries`;
   }
 
-  async findOne(id: number) {
-    return await this.prisma.calendarEntry.findUnique({
+  async findOne(id: number): Promise<model.FindOneResponse | null> {
+    const entry = await this.prisma.calendarEntry.findUnique({
       where: {
         id,
       },
     });
+    return entry;
   }
 
-  async update(id: number, updateCalendarEntryDto: UpdateCalendarEntryDto) {
+  async update(id: number, data: model.UpdateRequest) {
     return await this.prisma.calendarEntry.update({
       where: { id },
-      data: updateCalendarEntryDto,
+      data,
     });
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} calendarEntry`;
+  async remove({ id }: model.RemoveRequest) {
+    await this.prisma.calendarEntry.delete({ where: { id } });
   }
 }

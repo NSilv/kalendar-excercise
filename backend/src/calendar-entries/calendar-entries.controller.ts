@@ -8,9 +8,8 @@ import {
   Delete,
 } from '@nestjs/common';
 import { CalendarEntriesService } from './calendar-entries.service';
-import { CreateCalendarEntryDto } from './dto/create-calendar-entry.dto';
-import { UpdateCalendarEntryDto } from './dto/update-calendar-entry.dto';
-
+import * as model from '@models/calendar-entry';
+import {} from 'nestjs-zod';
 @Controller('calendar-entries')
 export class CalendarEntriesController {
   constructor(
@@ -18,30 +17,32 @@ export class CalendarEntriesController {
   ) {}
 
   @Post()
-  create(@Body() createCalendarEntryDto: CreateCalendarEntryDto) {
+  create(@Body() createCalendarEntryDto: model.CreateRequestDto) {
     return this.calendarEntriesService.create(createCalendarEntryDto);
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<model.FindAllResponseDto> {
     return this.calendarEntriesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(
+    @Param('id') id: string,
+  ): Promise<model.FindOneResponseDto | null> {
     return this.calendarEntriesService.findOne(+id);
   }
 
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateCalendarEntryDto: UpdateCalendarEntryDto,
+    @Body() updateCalendarEntryDto: model.UpdateRequestDto,
   ) {
     return this.calendarEntriesService.update(+id, updateCalendarEntryDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.calendarEntriesService.remove(+id);
+  @Delete()
+  remove(@Body() removeCalendarEntryDto: model.RemoveRequestDto) {
+    return this.calendarEntriesService.remove(removeCalendarEntryDto);
   }
 }
