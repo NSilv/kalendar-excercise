@@ -23,7 +23,13 @@ import {
   createTheme,
   useMediaQuery,
 } from "@mui/material";
-const client = new QueryClient();
+const client = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+    },
+  },
+});
 const HydrateAtoms = ({ children }: React.PropsWithChildren<{}>) => {
   useHydrateAtoms([[queryClientAtom, client]]);
   return children;
@@ -44,47 +50,45 @@ export default function Home() {
     [prefersDarkMode]
   );
   return (
-    <>
-      <Box sx={{ display: "flex" }}>
-        <QueryClientProvider client={client}>
-          <Provider>
-            <HydrateAtoms>
-              <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <Box
-                  component={"nav"}
-                  sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+    <QueryClientProvider client={client}>
+      <Provider>
+        <HydrateAtoms>
+          <ThemeProvider theme={theme}>
+            <Box sx={{ display: "flex" }}>
+              <CssBaseline />
+              <Box
+                component={"nav"}
+                sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+              >
+                <Drawer
+                  variant={"permanent"}
+                  ModalProps={{ keepMounted: true }}
                 >
-                  <Drawer
-                    variant={"permanent"}
-                    ModalProps={{ keepMounted: true }}
-                  >
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <NavigationCalendar
-                        currentDate={currentDate}
-                        onDateChange={setCurrentDate}
-                      />
-                    </LocalizationProvider>
-                  </Drawer>
-                </Box>
-              </ThemeProvider>
-            </HydrateAtoms>
-          </Provider>
-        </QueryClientProvider>
-        <Box
-          component={"main"}
-          sx={{
-            flexGrow: 1,
-            p: 3,
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
-          }}
-        >
-          <DayCalendar
-            currentDate={currentDate.toDate()}
-            onDateChange={(date) => setCurrentDate(dayjs(date))}
-          />
-        </Box>
-      </Box>
-    </>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <NavigationCalendar
+                      currentDate={currentDate}
+                      onDateChange={setCurrentDate}
+                    />
+                  </LocalizationProvider>
+                </Drawer>
+              </Box>
+              <Box
+                component={"main"}
+                sx={{
+                  flexGrow: 1,
+                  p: 3,
+                  width: { sm: `calc(100% - ${drawerWidth}px)` },
+                }}
+              >
+                <DayCalendar
+                  currentDate={currentDate.toDate()}
+                  onDateChange={(date) => setCurrentDate(dayjs(date))}
+                />
+              </Box>
+            </Box>
+          </ThemeProvider>
+        </HydrateAtoms>
+      </Provider>
+    </QueryClientProvider>
   );
 }
