@@ -17,19 +17,19 @@ export class CalendarEntriesController {
   ) {}
 
   @Post()
-  create(@Body() createCalendarEntryDto: model.CreateRequestDto) {
+  async create(@Body() createCalendarEntryDto: model.CreateRequestDto) {
     return this.calendarEntriesService.create(createCalendarEntryDto);
   }
 
   @Get()
-  async findAll(): Promise<model.FindAllResponseDto> {
+  async findAll(): Promise<model.CalendarEntriesDto> {
     return this.calendarEntriesService.findAll();
   }
 
   @Get(':id')
   async findOne(
     @Param('id') id: string,
-  ): Promise<model.FindOneResponseDto | null> {
+  ): Promise<model.CalendarEntryDto | null> {
     return this.calendarEntriesService.findOne(+id);
   }
 

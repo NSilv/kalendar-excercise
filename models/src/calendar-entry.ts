@@ -22,10 +22,10 @@ export const RemoveRequest = db.CalendarEntryModel.pick({ id: true });
 export type RemoveRequest = z.infer<typeof RemoveRequest>;
 export class RemoveRequestDto extends createZodDto(RemoveRequest) {}
 
-export const FindAllResponse = db.CalendarEntryModel.array();
-export type FindAllResponse = z.infer<typeof FindAllResponse>;
-export class FindAllResponseDto extends createZodDto(FindAllResponse) {}
+export const CalendarEntries = db.CalendarEntryModel.array();
+export type CalendarEntries = z.infer<typeof CalendarEntries>;
+export class CalendarEntriesDto extends createZodDto(CalendarEntries) {}
 
-export const FindOneResponse = db.CalendarEntryModel;
-export type FindOneResponse = z.infer<typeof FindOneResponse>;
-export class FindOneResponseDto extends createZodDto(FindOneResponse) {}
+export const CalendarEntry = db.CalendarEntryModel;
+export type CalendarEntry = z.infer<typeof CalendarEntry>;
+export class CalendarEntryDto extends createZodDto(CalendarEntry) {}
