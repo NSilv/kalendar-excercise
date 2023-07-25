@@ -5,12 +5,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator zod {
-  provider      = "nestjs-zod-prisma"
-  output        = "../../models/src/autogen"
-  relationModel = true
-  generateDto   = true
-}
+// generator zod {
+//   provider      = "nestjs-zod-prisma"
+//   output        = "../../models/src/autogen"
+//   relationModel = true
+//   generateDto   = true
+// }
 
 datasource db {
   provider = "sqlite"
